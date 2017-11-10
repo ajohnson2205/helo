@@ -14,4 +14,11 @@ Back
 GET - /api
 
 
-npm install express massive express-sessions body-parser cors dotenv axios 
+//dependencies
+
+npm install axios express-sessions cors massive body-parser dotenv express request passport-auth0
+
+
+//what tables do we need?
+
+https://robohash.org/name
