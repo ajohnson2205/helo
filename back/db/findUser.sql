@@ -2,4 +2,4 @@ SELECT
   *
 FROM
   users
-WHERE users.authID = $1
+WHERE users.authid = $1

@@ -37,6 +37,54 @@ app.use(passport.initialize());
 app.use(passport.session());
 passport.use( strategy  );
 
+
+passport.serializeUser((user, done) => {
+  console.log("THIS IS THE USER!!!!!!!!!!!!!!!!!!!!!!!!!!!!", user)
+  var random = Math.floor(Math.random() * 1000000)
+  var firstname = (user.name.givenName) ? user.name.givenName : ""
+  var lastname = (user.name.familyName) ? user.name.familyName : ""
+  var id = (user.id)
+  done(null, {
+    authid: id,
+    firstname: firstname,
+    lastname: lastname,
+    picture: `https://robohash.org/${random}`
+  })
+})
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
+app.get( '/auth',
+  passport.authenticate('auth0',
+    { successRedirect: '/me', failureRedirect: '/auth', failureFlash: true }
+  )
+);
+
+
+// app.get('/auth', passport.authenticate('auth0'));
+//
+// app.get('/auth/callback', passport.authenticate('auth0', {
+//   successRedirect: 'http://localhost:1337/',
+//   failureRedirect: 'http://localhost:1337/auth/'
+// }))
+
+
+app.get('/me', ( req, res, next) => {
+  if ( !req.user ) {
+    res.redirect('/auth');
+  } else {
+    // req.user === req.session.passport.user
+    // console.log( req.user )
+    // console.log( req.session.passport.user );
+    res.status(200).send( JSON.stringify( req.user, null, 10 ) );
+  }
+});
+
+
+
+
 //serve the files with express static
 // app.use(express.static(__dirname + '/'))
 
