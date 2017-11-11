@@ -10,11 +10,12 @@ module.exports = new Auth0Strategy({
    callbackURL:  '/auth'
   },
   function(accessToken, refreshToken, extraParams, profile, done) {
+    console.log(profile)
     // accessToken is the token to call Auth0 API (not needed in the most cases)
     // extraParams.id_token has the JSON Web Token
     // profile has all the information from the user
     const db = app.get('db')
-    console.log(profile)
+    // console.log(profile)
     var random = Math.floor(Math.random() * 1000000)
     profile.identities[0].user_id = profile.identities[0].user_id.toString()
 

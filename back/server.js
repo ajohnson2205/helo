@@ -35,21 +35,31 @@ app.use(session({
 //passport strategy
 app.use(passport.initialize());
 app.use(passport.session());
+
+
+
 passport.use( strategy  );
 
 
 passport.serializeUser((user, done) => {
-  console.log("THIS IS THE USER!!!!!!!!!!!!!!!!!!!!!!!!!!!!", user)
-  var random = Math.floor(Math.random() * 1000000)
-  var firstname = (user.name.givenName) ? user.name.givenName : ""
-  var lastname = (user.name.familyName) ? user.name.familyName : ""
-  var id = (user.id)
-  done(null, {
-    authid: id,
-    firstname: firstname,
-    lastname: lastname,
-    picture: `https://robohash.org/${random}`
-  })
+  console.log("xxxxxxx", user);
+
+  if(user.name) {
+    var firstname = (user.name.givenName) ? user.name.givenName : ""
+    var lastname = (user.name.familyName) ? user.name.familyName : ""
+    var id = (user.id)
+    done(null, {
+      authid: id,
+      firstname: firstname,
+      lastname: lastname,
+      picture: ""
+    })
+
+  }
+  else {
+    return done(null, user)
+  }
+
 })
 
 passport.deserializeUser(function(obj, done) {
@@ -63,12 +73,12 @@ app.get( '/auth',
 );
 
 
-// app.get('/auth', passport.authenticate('auth0'));
-//
-// app.get('/auth/callback', passport.authenticate('auth0', {
-//   successRedirect: 'http://localhost:1337/',
-//   failureRedirect: 'http://localhost:1337/auth/'
-// }))
+app.get('/logout', (req, res) => {
+  req.logOut();
+  return res.redirect('https://bearded.auth0.com/v2/logout')
+})
+
+
 
 
 app.get('/me', ( req, res, next) => {
