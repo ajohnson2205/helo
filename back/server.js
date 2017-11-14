@@ -73,10 +73,6 @@ app.get( '/auth',
 );
 
 
-app.get('/logout', (req, res) => {
-  req.logOut();
-  return res.redirect('https://bearded.auth0.com/v2/logout')
-})
 
 
 
